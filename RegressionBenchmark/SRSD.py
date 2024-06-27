@@ -129,7 +129,7 @@ class MSBoostRegressor(BaseEstimator, RegressorMixin):
         return_vals: bool = True,
         # stacking_model=ExtraTreesRegressor,
     ):
-        """fit VGBoost model
+        """fit MSBoost model
 
         Args:
             X (iterable)
