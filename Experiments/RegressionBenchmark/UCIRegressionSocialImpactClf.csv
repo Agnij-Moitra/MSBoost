@@ -1,0 +1,27 @@
+Dataset,UCI ID,LGBM,XGB,MSBoost
+Heart Failure Clinical Records,519,5.6733 ± 2.0605,5.7955 ± 2.4525,6.1539 ± 1.4234
+Statlog (German Credit Data),144,NaN,NaN,NaN
+Breast Cancer Wisconsin (Diagnostic),17,1.2031 ± 0.6745,1.2664 ± 0.4887,1.5204 ± 0.2374
+Statlog (Australian Credit Approval),143,4.5446 ± 1.3682,4.5446 ± 1.0654,4.9625 ± 1.4306
+Statlog (Heart),145,NaN,NaN,NaN
+Early Stage Diabetes Risk Prediction,529,1.2477 ± 0.5187,1.0397 ± 0.4901,1.3863 ± 0.3100
+Differentiated Thyroid Cancer Recurrence,915,1.6026 ± 0.7125,1.509 ± 0.9180,1.2269 ± 0.8810
+Thoracic Surgery Data,277,5.905 ± 1.3846,6.3652 ± 1.6376,11.3499 ± 8.9552
+Rice (Cammeo and Osmancik),545,3.0084 ± 0.2386,2.9611 ± 0.1358,2.7908 ± 0.1036
+Haberman's Survival,43,NaN,NaN,NaN
+Blood Transfusion Service Center,176,9.2046 ± 0.4857,9.4958 ± 1.2002,8.3357 ± 0.4839
+Iris,53,0.0 ± 0.0000,0.2403 ± 0.4806,0.0 ± 0.0000
+Acute Inflammations,184,0.3004 ± 0.6007,0.7509 ± 1.2015,0.0 ± 0.0000
+Breast Cancer Coimbra,451,NaN,NaN,NaN
+MONK's Problems,70,9.0095 ± 1.4034,9.0095 ± 1.4034,9.0095 ± 1.4034
+Raisin,850,5.5267 ± 1.2575,5.0862 ± 1.4417,5.2864 ± 1.5949
+Vertebral Column,212,5.581 ± 0.9446,5.2321 ± 1.0399,6.1623 ± 2.3998
+Higher Education Students Performance Evaluation,856,nan ± nan,nan ± nan,nan ± nan
+Risk Factor Prediction of Chronic Kidney Disease,857,0.0 ± 0.0000,0.0 ± 0.0000,0.0 ± 0.0000
+SPECT Heart,95,6.3448 ± 1.2540,6.6093 ± 1.8216,13.6215 ± 9.0544
+SPECTF Heart,96,6.7579 ± 2.4103,6.6193 ± 1.6853,6.4808 ± 1.2484
+ILPD (Indian Liver Patient Dataset),225,NaN,NaN,NaN
+Tic-Tac-Toe Endgame,101,0.4513 ± 0.3058,0.4134 ± 0.2189,0.4136 ± 0.3002
+Energy Efficiency,242,NaN,NaN,NaN
+Fertility,244,NaN,NaN,NaN
+Glioma Grading Clinical and Mutation Features,759,6.443 ± 0.9141,6.486 ± 0.5554,4.8107 ± 0.7581

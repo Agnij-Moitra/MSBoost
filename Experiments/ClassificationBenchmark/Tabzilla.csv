@@ -1,0 +1,20 @@
+Dataset,LGBM
+qsar-biodeg,0.9263 ± 0.0291
+phoneme,0.8953 ± 0.0233
+nomao,0.9783 ± 0.0077
+mfeat-fourier,nan ± nan
+SpeedDating,0.8321 ± 0.0480
+cnae-9,nan ± nan
+mfeat-zernike,nan ± nan
+Bioresponse,0.8534 ± 0.0234
+higgs,0.6635 ± 0.0385
+one-hundred-plants-texture,nan ± nan
+artificial-characters,nan ± nan
+Australian,0.8451 ± 0.0262
+socmob,nan ± nan
+elevators,nan ± nan
+colic,0.7072 ± 0.0238
+guillermo,0.7871 ± 0.0172
+airlines,0.5945 ± 0.0484
+jasmine,0.8332 ± 0.0142
+poker-hand,nan ± nan
