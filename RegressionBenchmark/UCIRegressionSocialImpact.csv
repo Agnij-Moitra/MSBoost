@@ -1,0 +1,3 @@
+Dataset,UCI ID,LGBM,XGB,MSBoost
+Student Performance,320,6.6759 ± 0.9367,7.9778 ± 1.1557,NaN
+Energy Efficiency,242,1.8387 ± 0.2179,2.4172 ± 0.2219,NaN
