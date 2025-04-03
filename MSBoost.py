@@ -4,7 +4,7 @@ from collections import Counter
 from pandas import DataFrame, concat
 from concurrent.futures import ThreadPoolExecutor
 # Scikit-learn: Machine Learning in Python, Pedregosa et al., JMLR 12, pp. 2825-2830, 2011
-from sklearn.model_selection import train_test_split, KFold
+from sklearn.model_selection import train_test_split, KFold, cross_val_score
 from sklearn.preprocessing import RobustScaler, MinMaxScaler
 from sklearn.metrics import mean_squared_error, r2_score, f1_score
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
@@ -583,17 +583,7 @@ class MSBoostClassifier(BaseEstimator, ClassifierMixin):
                         self._models = tuple(
                             sample(self._models_lst, n_random_models))
                     elif self.freeze_models:
-                        if self.n_iter_models > -1:
-                            freeze_models_lst.append([i.get("model") for i in sorted(results, key=lambda x: x.get(
-                                "loss", float('inf')))][:n_models])
-                            self.n_iter_models -= 1
-                        else:
-                            model_lst = sorted(dict(Counter(i for sub in freeze_models_lst for i in set(
-                                sub))).items(), key=lambda ele: ele[1], reverse=True)
-                            # return model_lst
-                            self._models = tuple(type(i[0]) for i in model_lst)[
-                                :n_models]
-                            # return self._models
+                        pass
                     elif bayes:
                         self.prior_proba = update_posterior_probabilities(models=results, prior_probabilities_all=self.prior_proba, penalty_factor=bayes_penalty_factor)
                         sorted_models = sorted(self.prior_proba.items(), key=lambda x: x[1], reverse=True)
