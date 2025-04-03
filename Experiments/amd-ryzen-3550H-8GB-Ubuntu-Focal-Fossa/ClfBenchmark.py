@@ -20,7 +20,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import RobustScaler, MinMaxScaler
 from sklearn.metrics import mean_squared_error, r2_score, f1_score
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
-from sklearn.ensemble import GradientBoostingRegressor, HistGradientBoostingRegressor, BaggingRegressor, ExtraTreesRegressor, RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor, HistGradientBoostingRegressor, BaggingRegressor, ExtraTreesRegressor, RandomForestRegressor, GradientBoostingClassifier
 from sklearn.svm import NuSVR, SVC, SVR, LinearSVR
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from lightgbm import LGBMRegressor
@@ -416,10 +416,10 @@ def cv_evaluate(model, X, y, scoring="neg_mean_squared_error", n_jobs=1):
     std_mse = np.std(cv_results)
     return f"{mean_mse:.4f} ± {std_mse:.4f}"
 
-from lightgbm import LGBMClassifier
-from catboost import CatBoostClassifier
+# from lightgbm import LGBMClassifier
+# from catboost import CatBoostClassifier
 
-from xgboost import XGBClassifier
+# from xgboost import XGBClassifier
 
 data_id = [
     151,
@@ -489,7 +489,7 @@ categorical_transformer_high = Pipeline(
 import pandas as pd
 
 num_samples = 1000
-cols = ["Dataset", "OpenML ID", "LGBM", "CAT", "XGB", "MSBoost"]
+cols = ["Dataset", "OpenML ID", "GBDT", "MSBoost"]
 benchmark = pd.DataFrame(columns=cols)
 lasso_threshold = 0.005 # remove irrelevant features 
 invalid = []
@@ -533,28 +533,18 @@ for i in range(len(data_id)):
         coefficients = lasso.coef_
         selected_features = np.where(np.abs(coefficients) > lasso_threshold)[0]
         X = X[:, selected_features]
-        lgb = "NaN"
-        xgb = "NaN"
-        cat = "NaN"
+        gbdt = "NaN"
         msboost = "NaN"
         with suppress_stdout():
             try:
-                lgb = cv_evaluate(LGBMClassifier, X, y, score_clf)
+                lgb = cv_evaluate(GradientBoostingClassifier, X, y, score_clf)
             except Exception as error:
                 invalid.append(i, error)
-            try:
-                xgb = cv_evaluate(XGBClassifier, X, y, score_clf)
-            except Exception as error:
-                invalid.append([i, error])
             try:
                 msboost = cv_evaluate(MSBoostClassifier, X, y, score_clf)
             except Exception as error:
                 invalid.append([i, error])
-            try:
-                cat = cv_evaluate(CatBoostClassifier, X, y, score_clf)
-            except Exception as error:
-                invalid.append([i, error])
-        append_row(benchmark, [name, ID, lgb, cat, xgb, msboost])
+        append_row(benchmark, [name, ID, gbdt, msboost])
         benchmark.to_csv("OpenML.csv", index=False)
     except Exception as error:
         invalid.append([i, error])
