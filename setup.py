@@ -19,7 +19,25 @@ setup(
     ext_modules=cythonize(
         extensions,
         annotate=True,
-        compiler_directives={'language_level': '3'},
+        compiler_directives={
+        'language_level': "3",                     # Use Python 3 syntax
+        'boundscheck': False,                      # Disable bounds checking
+        'wraparound': False,                       # Disable negative indexing
+        'nonecheck': False,                        # Disable None checks
+        'initializedcheck': False,                 # Skip uninitialized variable checks
+        'cdivision': True,                         # Enable C-style division
+        'overflowcheck': False,                    # Disable integer overflow checks
+        'infer_types': True,                       # Enable type inference
+        'autotestdict': False,                     # Skip dictionary type checks
+        'optimize.use_switch': True,               # Use switch statements for optimization
+        'optimize.unpack_method_calls': True,      # Optimize method calls
+        'binding': False,                          # Disable Python function bindings
+        'fast_get': True,                          # Optimize attribute access
+        'profile': False,                          # Disable profiling support
+        'linetrace': False,                        # Disable line tracing for debugging
+        'docstrings': False,                       # Exclude docstrings from compiled code
+        'embedsignature': False                    # Prevent embedding function signatures
+    },
         build_dir="build",
         cache=True,
     ),

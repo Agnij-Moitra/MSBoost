@@ -11,6 +11,11 @@
 # cython: optimize.use_switch=True
 # cython: docstrings=False
 # cython: embedsignature=False
+# cython: overflowcheck=False  
+# cython: autotestdict=False  
+# cython: fast_get=True  
+# cython: linetrace=False  
+
 
 import numpy as np
 from sklearn.base import BaseEstimator, RegressorMixin, ClassifierMixin
