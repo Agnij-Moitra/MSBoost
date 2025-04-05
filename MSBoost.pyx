@@ -7,6 +7,10 @@
 # cython: infer_types=True
 # cython: profile=False
 # cython: binding=False
+# cython: optimize.unpack_method_calls=True
+# cython: optimize.use_switch=True
+# cython: docstrings=False
+# cython: embedsignature=False
 
 import numpy as np
 from sklearn.base import BaseEstimator, RegressorMixin, ClassifierMixin
