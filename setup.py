@@ -2,7 +2,9 @@ from setuptools import setup, Extension
 from Cython.Build import cythonize
 import numpy
 import os
+from Cython.Compiler import Options
 
+Options.docstrings = False
 os.environ['CYTHON_BUILD_PARALLEL'] = '1'
 
 extensions = [
@@ -32,10 +34,8 @@ setup(
         'optimize.use_switch': True,               # Use switch statements for optimization
         'optimize.unpack_method_calls': True,      # Optimize method calls
         'binding': False,                          # Disable Python function bindings
-        'fast_get': True,                          # Optimize attribute access
         'profile': False,                          # Disable profiling support
         'linetrace': False,                        # Disable line tracing for debugging
-        'docstrings': False,                       # Exclude docstrings from compiled code
         'embedsignature': False                    # Prevent embedding function signatures
     },
         build_dir="build",

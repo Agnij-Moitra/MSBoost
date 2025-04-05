@@ -9,11 +9,9 @@
 # cython: binding=False
 # cython: optimize.unpack_method_calls=True
 # cython: optimize.use_switch=True
-# cython: docstrings=False
 # cython: embedsignature=False
 # cython: overflowcheck=False  
 # cython: autotestdict=False  
-# cython: fast_get=True  
 # cython: linetrace=False  
 
 
