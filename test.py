@@ -10,7 +10,7 @@ def regression_test():
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
     
     # Initialize and fit the regressor
-    regressor = MSBoostRegressor(n_estimators=100, learning_rate=0.01, return_vals=True)
+    regressor = MSBoostRegressor(n_estimators=100, learning_rate=0.0001, return_vals=True)
     regressor.fit(X_train, y_train)
     
     # Predict and evaluate using mean squared error
@@ -24,7 +24,7 @@ def classification_test():
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
     
     # Initialize and fit the classifier
-    classifier = MSBoostClassifier(n_estimators=100, learning_rate=0.01, return_vals=True)
+    classifier = MSBoostClassifier(n_estimators=100, learning_rate=0.0001, return_vals=True)
     classifier.fit(X_train, y_train)
     
     # Predict and evaluate using accuracy

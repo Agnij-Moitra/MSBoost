@@ -222,7 +222,7 @@ class MSBoostRegressor(BaseEstimator, RegressorMixin):
             error = mean_squared_error(y, p)
             errors.append(error)
 
-            if error < 1e-6 and return_best:
+            if error < 1e-8 and return_best:
                 break
 
         if errors and return_best:
@@ -386,7 +386,7 @@ class MSBoostClassifier(BaseEstimator, ClassifierMixin):
             error = -np.mean(y * np.log(p_prob + 1e-15) + (1 - y) * np.log(1 - p_prob + 1e-15))
             errors.append(error)
 
-            if error < 1e-6 and return_best:
+            if error < 1e-8 and return_best:
                 break
 
         if errors and return_best:
