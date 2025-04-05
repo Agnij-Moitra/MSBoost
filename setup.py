@@ -22,5 +22,12 @@ setup(
         compiler_directives={'language_level': '3'},
         build_dir="build",
         cache=True,
-    )
+    ),
+    install_requires=[
+        "numpy",
+        "pandas",
+        "scikit-learn",
+        "scipy",
+    ],
+    python_requires=">=3.6",
 )
