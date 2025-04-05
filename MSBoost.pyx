@@ -230,8 +230,8 @@ class MSBoostRegressor(BaseEstimator, RegressorMixin):
             errors = errors[:min_error_idx + 1]
 
         if return_vals:
-            self.errors_ = errors
-            self.ensemble_ = self.min_models_
+            self.errors = errors
+            self.ensemble = self.min_models_
 
         return self
 
@@ -394,8 +394,8 @@ class MSBoostClassifier(BaseEstimator, ClassifierMixin):
             errors = errors[:min_error_idx + 1]
 
         if return_vals:
-            self.errors_ = errors
-            self.ensemble_ = self.min_models_
+            self.errors = errors
+            self.ensemble = self.min_models_
 
         return self
 

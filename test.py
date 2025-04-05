@@ -1,8 +1,10 @@
 import numpy as np
 from sklearn.datasets import make_regression, make_classification
+import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error, accuracy_score
 from sklearn.model_selection import train_test_split
 from MSBoost import MSBoostRegressor, MSBoostClassifier
+from sklearn.ensemble import GradientBoostingClassifier, GradientBoostingRegressor
 
 def regression_test():
     # Generate synthetic regression data
@@ -10,13 +12,30 @@ def regression_test():
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
     
     # Initialize and fit the regressor
-    regressor = MSBoostRegressor(n_estimators=100, learning_rate=0.001, return_vals=True)
+    regressor = MSBoostRegressor(n_estimators=100, learning_rate=0.001, return_vals=True, bayes=True)
     regressor.fit(X_train, y_train)
-    
     # Predict and evaluate using mean squared error
     y_pred = regressor.predict(X_test)
     mse = mean_squared_error(y_test, y_pred)
-    print("Regression Test - Mean Squared Error:", mse)
+    print("MSBoost Regression Test - Mean Squared Error:", mse)
+    print(regressor.ensemble)
+    iterations = list(range(1, len(regressor.errors) + 1))
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(iterations, regressor.errors, marker='o', linestyle='-', color='blue', label='Error')
+    plt.title('MSBoostRegressor Error per Iteration')
+    plt.xlabel('Iteration')
+    plt.ylabel('Error')
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+    regressor = GradientBoostingRegressor()
+    regressor.fit(X_train, y_train)
+    # Predict and evaluate using mean squared error
+    y_pred = regressor.predict(X_test)
+    mse = mean_squared_error(y_test, y_pred)
+    print("GBDT Regression Test - Mean Squared Error:", mse)
 
 def classification_test():
     # Generate synthetic binary classification data
@@ -24,13 +43,35 @@ def classification_test():
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
     
     # Initialize and fit the classifier
-    classifier = MSBoostClassifier(n_estimators=100, learning_rate=0.001, return_vals=True)
+    classifier = MSBoostClassifier(n_estimators=100, learning_rate=0.001, return_vals=True, bayes=True)
     classifier.fit(X_train, y_train)
-    
+
     # Predict and evaluate using accuracy
     y_pred = classifier.predict(X_test)
     acc = accuracy_score(y_test, y_pred)
-    print("Classification Test - Accuracy:", acc)
+    print("MSBoost Classification Test - Accuracy:", acc)
+    print(classifier.ensemble)
+
+    iterations = list(range(1, len(classifier.errors) + 1))
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(iterations, classifier.errors, marker='o', linestyle='-', color='blue', label='Error')
+    plt.title('MSBoostRegressor Error per Iteration')
+    plt.xlabel('Iteration')
+    plt.ylabel('Error')
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+    del classifier
+
+    classifier = GradientBoostingClassifier()
+    classifier.fit(X_train, y_train)
+
+    # Predict and evaluate using accuracy
+    y_pred = classifier.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    print("GBDT Classification Test - Accuracy:", acc)
 
 if __name__ == '__main__':
     regression_test()
