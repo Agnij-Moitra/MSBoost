@@ -12,7 +12,6 @@ from scipy.stats import dirichlet
 from sklearn.utils import all_estimators
 import warnings
 from sklearn.exceptions import ConvergenceWarning
-
 warnings.filterwarnings('ignore', category=FutureWarning)
 warnings.filterwarnings('ignore', category=ConvergenceWarning)
 
