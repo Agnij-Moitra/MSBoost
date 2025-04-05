@@ -6,7 +6,7 @@ from MSBoost import MSBoostRegressor, MSBoostClassifier
 
 def regression_test():
     # Generate synthetic regression data
-    X, y = make_regression(n_samples=50, n_features=10, noise=0.1, random_state=42)
+    X, y = make_regression(n_samples=50, n_features=5, noise=0.1, random_state=42)
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
     
     # Initialize and fit the regressor
@@ -20,7 +20,7 @@ def regression_test():
 
 def classification_test():
     # Generate synthetic binary classification data
-    X, y = make_classification(n_samples=50, n_features=10, n_informative=5, n_redundant=0, random_state=42)
+    X, y = make_classification(n_samples=50, n_features=5, n_informative=5, n_redundant=0, random_state=42)
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
     
     # Initialize and fit the classifier
