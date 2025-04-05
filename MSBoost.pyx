@@ -51,7 +51,7 @@ REGRESSORS = [
 ]
 
 
-def update_posterior_probabilities(models, prior_probabilities_all, penalty_factor=0.6, num_samples=1_000_000):
+cdef update_posterior_probabilities(models, prior_probabilities_all, penalty_factor=0.6, num_samples=1_000_000):
     models_sorted = sorted(models, key=lambda x: x['loss'])
     for rank, model in enumerate(models_sorted, start=1):
         model['loss'] = rank
