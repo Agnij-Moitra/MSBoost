@@ -41,6 +41,6 @@ setup(
         build_dir="build",
         cache=True,
     ),
-    install_requires=["numpy", "pandas", "scikit-learn", "scipy"],
+    install_requires=["numpy", "pandas", "scikit-learn", "scipy", "cython"],
     python_requires=">=3.6",
 )
