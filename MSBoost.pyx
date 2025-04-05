@@ -1,3 +1,13 @@
+# cython: language_level=3
+# cython: boundscheck=False
+# cython: wraparound=False
+# cython: nonecheck=False
+# cython: initializedcheck=False
+# cython: cdivision=True
+# cython: infer_types=True
+# cython: profile=False
+# cython: binding=False
+
 import numpy as np
 from sklearn.base import BaseEstimator, RegressorMixin, ClassifierMixin
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
@@ -20,14 +30,14 @@ removed_regressors = (
     "ARDRegression", 
     "CCA", 
     "DummyRegressor",
-    "ElasticNet",
+    "ElasticNetCV",
     "GradientBoostingRegressor",
     "HistGradientBoostingRegressor",
-    "Lars",
-    "Lasso",
-    "LassoLars",
-    "Ridge",
-    "OrthogonalMatchingPursuit",
+    "LarsCV",
+    "LassoCV",
+    "LassoLarsCV",
+    "RidgeCV",
+    "OrthogonalMatchingPursuitCV",
     "MLPRegressor",
     "SGDRegressor",
     "IsotonicRegression", 
