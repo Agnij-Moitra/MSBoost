@@ -64,4 +64,4 @@ if __name__ == '__main__':
     regression_test()
     classification_test()
     e = perf_counter()
-    print(s - e)
+    print((e - s) / 60)

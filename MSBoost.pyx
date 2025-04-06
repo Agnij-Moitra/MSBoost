@@ -28,9 +28,10 @@ from time import perf_counter
 from scipy.stats import dirichlet
 from sklearn.utils import all_estimators
 import warnings
-from sklearn.exceptions import ConvergenceWarning
+from sklearn.exceptions import ConvergenceWarning, UndefinedMetricWarning
 warnings.filterwarnings('ignore', category=FutureWarning)
 warnings.filterwarnings('ignore', category=ConvergenceWarning)
+warnings.filterwarnings('ignore', category=UndefinedMetricWarning)
 
 removed_regressors = (
     "TheilSenRegressor",
