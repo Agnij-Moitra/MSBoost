@@ -14,8 +14,8 @@
 # cython: autotestdict=False  
 # cython: linetrace=False  
 
-
 import numpy as np
+cimport numpy as np
 from sklearn.base import BaseEstimator, RegressorMixin, ClassifierMixin
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 from sklearn.metrics import mean_squared_error
@@ -32,7 +32,7 @@ warnings.filterwarnings('ignore', category=FutureWarning)
 warnings.filterwarnings('ignore', category=ConvergenceWarning)
 warnings.filterwarnings('ignore', category=UndefinedMetricWarning)
 
-removed_regressors = (
+cdef tuple removed_regressors = (
     "TheilSenRegressor",
     "ARDRegression", 
     "CCA", 
@@ -61,39 +61,39 @@ removed_regressors = (
     "VotingRegressor", 
 )
 
-REGRESSORS = [
+cdef list REGRESSORS = [
     est[1]
     for est in all_estimators()
     if (issubclass(est[1], RegressorMixin) and (est[0] not in removed_regressors))
 ]
 
 
-cdef update_posterior_probabilities(models, prior_probabilities_all, penalty_factor=0.6, num_samples=1_000_000):
-    models_sorted = sorted(models, key=lambda x: x['loss'])
+cdef dict update_posterior_probabilities(list models, dict prior_probabilities_all, float penalty_factor=0.6, int num_samples=1_000_000):
+    cdef dict models_sorted = sorted(models, key=lambda x: x['loss'])
     for rank, model in enumerate(models_sorted, start=1):
         model['loss'] = rank
-    observed_errors = np.array([model['loss'] for model in models_sorted])
-    trained_model_instances = [model['model'] for model in models_sorted]
-    prior_probabilities = np.array([
+    cdef np.ndarray observed_errors = np.array([model['loss'] for model in models_sorted])
+    cdef list trained_model_instances = [model['model'] for model in models_sorted]
+    cdef np.ndarray prior_probabilities = np.array([
         prior_probabilities_all[type(model_instance)]
         for model_instance in trained_model_instances
     ])
-    alpha = np.ones(len(trained_model_instances))
-    samples = dirichlet.rvs(alpha, size=num_samples)
-    weights = np.exp(-samples @ observed_errors)
-    normalized_weights = weights / np.sum(weights)
-    updated_posterior_probabilities_trained = prior_probabilities * np.dot(normalized_weights, samples)
-    updated_posterior_probabilities_all = deepcopy(prior_probabilities_all)
+    cdef np.ndarray alpha = np.ones(len(trained_model_instances))
+    cdef samples = dirichlet.rvs(alpha, size=num_samples)
+    cdef np.ndarray weights = np.exp(-samples @ observed_errors)
+    cdef np.ndarray normalized_weights = weights / np.sum(weights)
+    cdef np.ndarray updated_posterior_probabilities_trained = prior_probabilities * np.dot(normalized_weights, samples)
+    cdef np.ndarray updated_posterior_probabilities_all = deepcopy(prior_probabilities_all)
     for i, model_instance in enumerate(trained_model_instances):
         updated_posterior_probabilities_all[type(model_instance)] = updated_posterior_probabilities_trained[i]
-    untrained_model_instances = [
+    cdef list untrained_model_instances = [
         model_instance
         for model_instance in prior_probabilities_all.keys()
         if not any(isinstance(model_instance, type(trained_instance)) for trained_instance in trained_model_instances)
     ]
     for model_instance in untrained_model_instances:
         updated_posterior_probabilities_all[model_instance] *= penalty_factor
-    total_probability = sum(updated_posterior_probabilities_all.values())
+    cdef float total_probability = sum(updated_posterior_probabilities_all.values())
     return {k: v / total_probability for k, v in updated_posterior_probabilities_all.items()}
 
 class MSBoostRegressor(BaseEstimator, RegressorMixin):
