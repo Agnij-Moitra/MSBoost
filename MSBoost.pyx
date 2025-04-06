@@ -21,7 +21,6 @@ from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 from concurrent.futures import ThreadPoolExecutor
-from os import cpu_count
 from copy import deepcopy
 from random import sample
 from time import perf_counter
@@ -165,8 +164,7 @@ class MSBoostRegressor(BaseEstimator, RegressorMixin):
     def _get_results(self, X, y):
         """Use ThreadPoolExecutor to evaluate all models."""
         args = [(model_name, X, y) for model_name in self._models]
-        num_workers = max(cpu_count(), len(self._models))
-        with ThreadPoolExecutor(max_workers=num_workers) as executor:
+        with ThreadPoolExecutor(max_workers=len(self._models)) as executor:
             results = list(executor.map(self._get_metrics, args))
         return [r for r in results if r is not None]
 
@@ -325,8 +323,7 @@ class MSBoostClassifier(BaseEstimator, ClassifierMixin):
 
     def _get_results(self, X, y):
         args = [(model_name, X, y) for model_name in self._models]
-        num_workers = max(cpu_count(), len(self._models))
-        with ThreadPoolExecutor(max_workers=num_workers) as executor:
+        with ThreadPoolExecutor(max_workers=len(self._models)) as executor:
             results = list(executor.map(self._get_metrics, args))
         return [r for r in results if r is not None]
 
