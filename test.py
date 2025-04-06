@@ -5,7 +5,6 @@ from sklearn.metrics import mean_squared_error, accuracy_score
 from sklearn.model_selection import train_test_split
 from MSBoost import MSBoostRegressor, MSBoostClassifier
 from time import perf_counter
-from sklearn.ensemble import GradientBoostingClassifier, GradientBoostingRegressor
 
 def regression_test():
     # Generate synthetic regression data
