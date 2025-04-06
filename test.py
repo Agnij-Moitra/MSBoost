@@ -4,17 +4,12 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error, accuracy_score
 from sklearn.model_selection import train_test_split
 from MSBoost import MSBoostRegressor, MSBoostClassifier
-from sklearn.ensemble import GradientBoostingClassifier, GradientBoostingRegressor
 
 def regression_test():
-    # Generate synthetic regression data
     X, y = make_regression(n_samples=10000, n_features=10, noise=0.1, random_state=42)
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
-    
-    # Initialize and fit the regressor
     regressor = MSBoostRegressor(n_estimators=100, learning_rate=0.1, return_vals=True, bayes=True)
     regressor.fit(X_train, y_train)
-    # Predict and evaluate using mean squared error
     y_pred = regressor.predict(X_test)
     mse = mean_squared_error(y_test, y_pred)
     print("MSBoost Regression Test - Mean Squared Error:", mse)
