@@ -251,10 +251,10 @@ class MSBoostRegressor(BaseEstimator, RegressorMixin):
 
         return self
 
-    def predict(self, X):
+    def predict(self, X) -> np.ndarray:
         check_is_fitted(self, 'min_models_')
         X = check_array(X)
-        p = np.full(X.shape[0], self._y_mean, dtype=np.float64)
+        cdef np.ndarray p = np.full(X.shape[0], self._y_mean, dtype=np.float64)
         for model in self.min_models_:
             p += self.learning_rate * model.predict(X)
         return p
@@ -414,16 +414,16 @@ class MSBoostClassifier(BaseEstimator, ClassifierMixin):
 
         return self
 
-    def predict_proba(self, X):
+    def predict_proba(self, X) -> np.ndarray:
         check_is_fitted(self, 'min_models_')
         X = check_array(X)
-        p = np.full(X.shape[0], self._y_mean, dtype=np.float64)
+        cdef np.ndarray p = np.full(X.shape[0], self._y_mean, dtype=np.float64)
         for model in self.min_models_:
             p += self.learning_rate * model.predict(X)
-        p_prob = 1 / (1 + np.exp(-p))
+        cdef np.ndarray p_prob = 1 / (1 + np.exp(-p))
         return np.vstack([1 - p_prob, p_prob]).T
 
     def predict(self, X):
         check_is_fitted(self, 'min_models_')
-        proba = self.predict_proba(X)
+        cdef np.ndarray proba = self.predict_proba(X)
         return (proba[:, 1] > 0.5).astype(int)

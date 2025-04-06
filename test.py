@@ -36,7 +36,7 @@ def classification_test():
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
     
     # Initialize and fit the classifier
-    classifier = MSBoostClassifier(n_estimators=100, learning_rate=0.1, return_vals=True, bayes=True)
+    classifier = MSBoostClassifier(n_estimators=10, learning_rate=0.1, return_vals=True, bayes=True)
     classifier.fit(X_train, y_train)
 
     # Predict and evaluate using accuracy
