@@ -62,8 +62,4 @@ if __name__ == '__main__':
     regression_test()
     classification_test()
     e = perf_counter()
-<<<<<<< HEAD
     print("Time Taken:", (e - s) / 60, "min")
-=======
-    print((e - s) / 60)
->>>>>>> temp-changes
