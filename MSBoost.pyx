@@ -14,6 +14,7 @@
 # cython: autotestdict=False  
 # cython: linetrace=False  
 
+
 import numpy as np
 cimport numpy as np
 from sklearn.base import BaseEstimator, RegressorMixin, ClassifierMixin
@@ -21,18 +22,18 @@ from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 from concurrent.futures import ThreadPoolExecutor
+from os import cpu_count
 from copy import deepcopy
 from random import sample
 from time import perf_counter
 from scipy.stats import dirichlet
 from sklearn.utils import all_estimators
 import warnings
-from sklearn.exceptions import ConvergenceWarning, UndefinedMetricWarning
+from sklearn.exceptions import ConvergenceWarning
 warnings.filterwarnings('ignore', category=FutureWarning)
 warnings.filterwarnings('ignore', category=ConvergenceWarning)
-warnings.filterwarnings('ignore', category=UndefinedMetricWarning)
 
-cdef tuple removed_regressors = (
+removed_regressors = (
     "TheilSenRegressor",
     "ARDRegression", 
     "CCA", 
@@ -61,39 +62,39 @@ cdef tuple removed_regressors = (
     "VotingRegressor", 
 )
 
-cdef list REGRESSORS = [
+REGRESSORS = [
     est[1]
     for est in all_estimators()
     if (issubclass(est[1], RegressorMixin) and (est[0] not in removed_regressors))
 ]
 
 
-cdef dict update_posterior_probabilities(list models, dict prior_probabilities_all, float penalty_factor=0.6, int num_samples=1_000_000):
-    cdef dict models_sorted = sorted(models, key=lambda x: x['loss'])
+def update_posterior_probabilities(models, prior_probabilities_all, penalty_factor=0.6, num_samples=1_000_000):
+    models_sorted = sorted(models, key=lambda x: x['loss'])
     for rank, model in enumerate(models_sorted, start=1):
         model['loss'] = rank
-    cdef np.ndarray observed_errors = np.array([model['loss'] for model in models_sorted])
-    cdef list trained_model_instances = [model['model'] for model in models_sorted]
-    cdef np.ndarray prior_probabilities = np.array([
+    observed_errors = np.array([model['loss'] for model in models_sorted])
+    trained_model_instances = [model['model'] for model in models_sorted]
+    prior_probabilities = np.array([
         prior_probabilities_all[type(model_instance)]
         for model_instance in trained_model_instances
     ])
-    cdef np.ndarray alpha = np.ones(len(trained_model_instances))
-    cdef samples = dirichlet.rvs(alpha, size=num_samples)
-    cdef np.ndarray weights = np.exp(-samples @ observed_errors)
-    cdef np.ndarray normalized_weights = weights / np.sum(weights)
-    cdef np.ndarray updated_posterior_probabilities_trained = prior_probabilities * np.dot(normalized_weights, samples)
-    cdef np.ndarray updated_posterior_probabilities_all = deepcopy(prior_probabilities_all)
+    alpha = np.ones(len(trained_model_instances))
+    samples = dirichlet.rvs(alpha, size=num_samples)
+    weights = np.exp(-samples @ observed_errors)
+    normalized_weights = weights / np.sum(weights)
+    updated_posterior_probabilities_trained = prior_probabilities * np.dot(normalized_weights, samples)
+    updated_posterior_probabilities_all = deepcopy(prior_probabilities_all)
     for i, model_instance in enumerate(trained_model_instances):
         updated_posterior_probabilities_all[type(model_instance)] = updated_posterior_probabilities_trained[i]
-    cdef list untrained_model_instances = [
+    untrained_model_instances = [
         model_instance
         for model_instance in prior_probabilities_all.keys()
         if not any(isinstance(model_instance, type(trained_instance)) for trained_instance in trained_model_instances)
     ]
     for model_instance in untrained_model_instances:
         updated_posterior_probabilities_all[model_instance] *= penalty_factor
-    cdef float total_probability = sum(updated_posterior_probabilities_all.values())
+    total_probability = sum(updated_posterior_probabilities_all.values())
     return {k: v / total_probability for k, v in updated_posterior_probabilities_all.items()}
 
 class MSBoostRegressor(BaseEstimator, RegressorMixin):
@@ -164,7 +165,8 @@ class MSBoostRegressor(BaseEstimator, RegressorMixin):
     def _get_results(self, X, y):
         """Use ThreadPoolExecutor to evaluate all models."""
         args = [(model_name, X, y) for model_name in self._models]
-        with ThreadPoolExecutor(max_workers=len(self._models)) as executor:
+        num_workers = min(cpu_count(), len(self._models))
+        with ThreadPoolExecutor(max_workers=num_workers) as executor:
             results = list(executor.map(self._get_metrics, args))
         return [r for r in results if r is not None]
 
@@ -251,10 +253,10 @@ class MSBoostRegressor(BaseEstimator, RegressorMixin):
 
         return self
 
-    def predict(self, X) -> np.ndarray:
+    def predict(self, X):
         check_is_fitted(self, 'min_models_')
         X = check_array(X)
-        cdef np.ndarray p = np.full(X.shape[0], self._y_mean, dtype=np.float64)
+        p = np.full(X.shape[0], self._y_mean, dtype=np.float64)
         for model in self.min_models_:
             p += self.learning_rate * model.predict(X)
         return p
@@ -323,7 +325,8 @@ class MSBoostClassifier(BaseEstimator, ClassifierMixin):
 
     def _get_results(self, X, y):
         args = [(model_name, X, y) for model_name in self._models]
-        with ThreadPoolExecutor(max_workers=len(self._models)) as executor:
+        num_workers = min(cpu_count(), len(self._models))
+        with ThreadPoolExecutor(max_workers=num_workers) as executor:
             results = list(executor.map(self._get_metrics, args))
         return [r for r in results if r is not None]
 
@@ -414,16 +417,16 @@ class MSBoostClassifier(BaseEstimator, ClassifierMixin):
 
         return self
 
-    def predict_proba(self, X) -> np.ndarray:
+    def predict_proba(self, X):
         check_is_fitted(self, 'min_models_')
         X = check_array(X)
-        cdef np.ndarray p = np.full(X.shape[0], self._y_mean, dtype=np.float64)
+        p = np.full(X.shape[0], self._y_mean, dtype=np.float64)
         for model in self.min_models_:
             p += self.learning_rate * model.predict(X)
-        cdef np.ndarray p_prob = 1 / (1 + np.exp(-p))
+        p_prob = 1 / (1 + np.exp(-p))
         return np.vstack([1 - p_prob, p_prob]).T
 
     def predict(self, X):
         check_is_fitted(self, 'min_models_')
-        cdef np.ndarray proba = self.predict_proba(X)
+        proba = self.predict_proba(X)
         return (proba[:, 1] > 0.5).astype(int)
