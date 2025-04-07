@@ -9,7 +9,7 @@ from sklearn.ensemble import GradientBoostingClassifier, GradientBoostingRegress
 
 def regression_test():
     # Generate synthetic regression data
-    X, y = make_regression(n_samples=10000, n_features=10, noise=0.1, random_state=42)
+    X, y = make_regression(n_samples=1000, n_features=10, noise=0.1, random_state=42)
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
     
     # Initialize and fit the regressor
@@ -20,21 +20,21 @@ def regression_test():
     mse = mean_squared_error(y_test, y_pred)
     print("MSBoost Regression Test - Mean Squared Error:", mse)
     print(regressor.ensemble)
-    iterations = list(range(1, len(regressor.errors) + 1))
+    # iterations = list(range(1, len(regressor.errors) + 1))
 
-    plt.figure(figsize=(10, 6))
-    plt.plot(iterations, regressor.errors, marker='.', linestyle='-', color='blue', label='Error')
-    plt.title('MSBoostRegressor Error per Iteration')
-    plt.xlabel('Iteration')
-    plt.ylabel('Error')
-    plt.grid(True)
-    plt.legend()
-    plt.tight_layout()
-    plt.show()
+    # plt.figure(figsize=(10, 6))
+    # plt.plot(iterations, regressor.errors, marker='.', linestyle='-', color='blue', label='Error')
+    # plt.title('MSBoostRegressor Error per Iteration')
+    # plt.xlabel('Iteration')
+    # plt.ylabel('Error')
+    # plt.grid(True)
+    # plt.legend()
+    # plt.tight_layout()
+    # plt.show()
 
 def classification_test():
     # Generate synthetic binary classification data
-    X, y = make_classification(n_samples=10000, n_features=10, n_informative=8, n_redundant=0, random_state=42)
+    X, y = make_classification(n_samples=1000, n_features=10, n_informative=8, n_redundant=0, random_state=42)
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
     
     # Initialize and fit the classifier
@@ -47,21 +47,21 @@ def classification_test():
     print("MSBoost Classification Test - Accuracy:", acc)
     print(classifier.ensemble)
 
-    iterations = list(range(1, len(classifier.errors) + 1))
+    # iterations = list(range(1, len(classifier.errors) + 1))
 
-    plt.figure(figsize=(10, 6))
-    plt.plot(iterations, classifier.errors, marker='.', linestyle='-', color='blue', label='Error')
-    plt.title('MSBoostClassifier Error per Iteration')
-    plt.xlabel('Iteration')
-    plt.ylabel('Error')
-    plt.grid(True)
-    plt.legend()
-    plt.tight_layout()
-    plt.show()
+    # plt.figure(figsize=(10, 6))
+    # plt.plot(iterations, classifier.errors, marker='.', linestyle='-', color='blue', label='Error')
+    # plt.title('MSBoostClassifier Error per Iteration')
+    # plt.xlabel('Iteration')
+    # plt.ylabel('Error')
+    # plt.grid(True)
+    # plt.legend()
+    # plt.tight_layout()
+    # plt.show()
 
 if __name__ == '__main__':
     s = perf_counter()
     regression_test()
     classification_test()
     e = perf_counter()
-    print(s - e)
+    print((e - s) / 60)

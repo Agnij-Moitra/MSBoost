@@ -16,6 +16,7 @@
 
 
 import numpy as np
+cimport numpy as np
 from sklearn.base import BaseEstimator, RegressorMixin, ClassifierMixin
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 from sklearn.metrics import mean_squared_error
@@ -68,7 +69,7 @@ REGRESSORS = [
 ]
 
 
-cdef update_posterior_probabilities(models, prior_probabilities_all, penalty_factor=0.6, num_samples=1_000_000):
+def update_posterior_probabilities(models, prior_probabilities_all, penalty_factor=0.6, num_samples=1_000_000):
     models_sorted = sorted(models, key=lambda x: x['loss'])
     for rank, model in enumerate(models_sorted, start=1):
         model['loss'] = rank
