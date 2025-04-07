@@ -57,8 +57,4 @@ setup(
     install_requires=["numpy", "pandas", "scikit-learn", "scipy", "cython"],
     python_requires=">=3.6",
     zip_safe=False,
-<<<<<<< HEAD
 )
-=======
-)
->>>>>>> temp-changes
